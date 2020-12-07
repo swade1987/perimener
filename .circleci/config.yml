@@ -14,11 +14,9 @@ jobs:
 
   release:
     docker:
-      - image: google/cloud-sdk
+      - image: circleci/golang:1.15
     steps:
       - checkout
-      - setup_remote_docker
-      - run: make configure-gcloud-cli
       - run: curl -sL https://git.io/goreleaser | bash
 
   test:
