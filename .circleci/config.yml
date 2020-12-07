@@ -1,0 +1,61 @@
+version: 2.1
+
+jobs:
+
+  build:
+    docker:
+      - image: google/cloud-sdk
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: build docker image
+          command: make build
+
+  publish:
+    docker:
+      - image: google/cloud-sdk
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: build docker image
+          command: make build
+      - run:
+          name: push image to gcr.io
+          command: make push-to-gcr
+
+  test:
+    docker:
+      - image: cimg/go:1.14
+    steps:
+      - checkout
+      - run:
+          name: test
+          command: make test
+
+  validate:
+    docker:
+      - image: securego/gosec:v2.3.0
+    steps:
+      - checkout
+      - run:
+          name: gosec
+          command: gosec ./...
+
+workflows:
+  version: 2
+  flow:
+    jobs:
+      - validate
+      - test
+      - build:
+          filters:
+            branches:
+              ignore:
+                - master
+      - publish:
+          filters:
+            branches:
+              only:
+                - master
