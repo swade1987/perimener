@@ -12,18 +12,12 @@ jobs:
           name: build docker image
           command: make build
 
-  publish:
+  release:
     docker:
-      - image: google/cloud-sdk
+      - image: circleci/golang:1.15
     steps:
       - checkout
-      - setup_remote_docker
-      - run:
-          name: build docker image
-          command: make build
-      - run:
-          name: push image to gcr.io
-          command: make push-to-gcr
+      - run: curl -sL https://git.io/goreleaser | bash
 
   test:
     docker:
@@ -54,8 +48,9 @@ workflows:
             branches:
               ignore:
                 - master
-      - publish:
+      - release:
           filters:
             branches:
-              only:
-                - master
+              ignore: /.*/
+            tags:
+              only: /v[0-9]+(\.[0-9]+)*(-.*)*/
