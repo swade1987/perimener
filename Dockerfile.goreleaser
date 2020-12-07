@@ -1,0 +1,5 @@
+FROM scratch
+MAINTAINER Steve Wade <steven@stevenwade.co.uk>
+
+COPY perimener .
+CMD [ "/perimener" ]

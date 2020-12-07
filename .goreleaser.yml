@@ -1,0 +1,37 @@
+before:
+  hooks:
+    - go mod download
+builds:
+  - env:
+      - CGO_ENABLED=0
+      - GO111MODULE=on
+    goos:
+      - darwin
+      - linux
+    goarch:
+      - amd64
+    binary: perimener
+    main: ./main.go
+archives:
+  - name_template: "{{ .Binary }}-{{ .Tag }}-{{ .Os }}-{{ .Arch }}"
+    id: zip
+    format: zip
+  - name_template: "{{ .Binary }}-{{ .Tag }}-{{ .Os }}-{{ .Arch }}"
+    id: tarball
+    format: tar.gz
+snapshot:
+  name_template: "{{ .Tag }}-SNAPSHOT"
+changelog:
+  skip: true
+release:
+  prerelease: auto
+dockers:
+  - image_templates:
+      - "eu.gcr.io/swade1987/perimener:latest"
+      - "eu.gcr.io/swade1987/perimener:{{ .Tag }}"
+    dockerfile: Dockerfile.goreleaser # Use a separate docker file for goreleaser
+    build_flag_templates:
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.title={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
