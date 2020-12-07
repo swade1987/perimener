@@ -1,0 +1,7 @@
+FROM scratch
+MAINTAINER Steve Wade <steven@stevenwade.co.uk>
+
+WORKDIR /app
+COPY perimener /app/
+
+CMD [ "/app/perimener" ]
