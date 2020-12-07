@@ -17,6 +17,7 @@ jobs:
       - image: google/cloud-sdk
     steps:
       - checkout
+      - setup_remote_docker
       - run: make configure-gcloud-cli
       - run: curl -sL https://git.io/goreleaser | bash
 
@@ -50,6 +51,7 @@ workflows:
               ignore:
                 - master
       - release:
+          context: google-cloud-platform
           filters:
             branches:
               ignore: /.*/
