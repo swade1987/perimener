@@ -1,0 +1,61 @@
+version: 2.1
+
+jobs:
+
+  build:
+    docker:
+      - image: google/cloud-sdk
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: build docker image
+          command: make build
+
+  release:
+    docker:
+      - image: circleci/golang:1.15
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: login
+          command: make login
+      - run: curl -sL https://git.io/goreleaser | bash
+
+  test:
+    docker:
+      - image: cimg/go:1.14
+    steps:
+      - checkout
+      - run:
+          name: test
+          command: make test
+
+  validate:
+    docker:
+      - image: securego/gosec:v2.3.0
+    steps:
+      - checkout
+      - run:
+          name: gosec
+          command: gosec ./...
+
+workflows:
+  version: 2
+  flow:
+    jobs:
+      - validate
+      - test
+      - build:
+          filters:
+            branches:
+              ignore:
+                - main
+      - release:
+          context: google-cloud-platform
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /v[0-9]+(\.[0-9]+)*(-.*)*/
