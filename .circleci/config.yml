@@ -17,6 +17,7 @@ jobs:
       - image: circleci/golang:1.15
     steps:
       - checkout
+      - setup_remote_docker
       - run: curl -sL https://git.io/goreleaser | bash
 
   test:
@@ -47,7 +48,7 @@ workflows:
           filters:
             branches:
               ignore:
-                - master
+                - main
       - release:
           context: google-cloud-platform
           filters:
