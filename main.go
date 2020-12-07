@@ -19,13 +19,13 @@ import (
 )
 
 type config struct {
+	DelaySeconds          int64  `env:"DELAY_SECONDS" envDefault:"0"`
 	ExpectedReadyPodCount int    `env:"EXPECTED_READY_POD_COUNT,required"`
-	UseLocalKubeConfig    bool   `env:"USE_LOCAL_KUBECONFIG" envDefault:"false"`
 	Namespace             string `env:"NAMESPACE,required"`
 	PodLabel              string `env:"POD_LABEL,required"`
-	SleepCount            int    `env:"SLEEP_COUNT" envDefault:"5"`
 	RandomWindowSeconds   int64  `env:"RANDOM_WINDOW_SECONDS" envDefault:"0"`
-	DelaySeconds          int64  `env:"DELAY_SECONDS" envDefault:"0"`
+	SleepCount            int    `env:"SLEEP_COUNT" envDefault:"5"`
+	UseLocalKubeConfig    bool   `env:"USE_LOCAL_KUBECONFIG" envDefault:"false"`
 }
 
 func main() {
@@ -42,13 +42,13 @@ func run() error {
 	}
 
 	log.Info().
+		Int64("delay_seconds", cfg.DelaySeconds).
 		Int("expected_ready_pod_count", cfg.ExpectedReadyPodCount).
-		Bool("use_local_kube_config", cfg.UseLocalKubeConfig).
 		Str("namespace", cfg.Namespace).
 		Str("pod_label", cfg.PodLabel).
-		Int("sleep_count", cfg.SleepCount).
 		Int64("random_window_seconds", cfg.RandomWindowSeconds).
-		Int64("delay_seconds", cfg.DelaySeconds).
+		Int("sleep_count", cfg.SleepCount).
+		Bool("use_local_kube_config", cfg.UseLocalKubeConfig).
 		Msg("starting perimener")
 
 	// Create an rest client not targeting a specific API version
@@ -82,12 +82,12 @@ func run() error {
 		if currentReadyPods < cfg.ExpectedReadyPodCount {
 			failureCount++
 			log.Info().
+				Int("current_ready_pods", currentReadyPods).
 				Int("expected_ready_pod_count", cfg.ExpectedReadyPodCount).
+				Int("failure_count", failureCount).
 				Str("namespace", cfg.Namespace).
 				Str("pod_label", cfg.PodLabel).
 				Int("sleep_count", cfg.SleepCount).
-				Int("current_ready_pods", currentReadyPods).
-				Int("failure_count", failureCount).
 				Msg("insufficient pods in a ready state; will retry after delay")
 			time.Sleep(time.Duration(cfg.SleepCount) * time.Second)
 			continue
