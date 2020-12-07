@@ -27,8 +27,8 @@ release:
   prerelease: auto
 dockers:
   - image_templates:
-      - "eu.gcr.io/swade1987/perimener:latest"
-      - "eu.gcr.io/swade1987/perimener:{{ .Tag }}"
+      - "swade1987/perimener:latest"
+      - "swade1987/perimener:{{ .Tag }}"
     dockerfile: Dockerfile.goreleaser # Use a separate docker file for goreleaser
     build_flag_templates:
       - "--label=org.opencontainers.image.created={{.Date}}"
