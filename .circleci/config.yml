@@ -18,6 +18,7 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
+      - make login
       - run: curl -sL https://git.io/goreleaser | bash
 
   test:
