@@ -1,6 +1,11 @@
 # Perímener ✋
 
-[![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg)](LICENSE)
+![GitHub](https://img.shields.io/github/license/swade1987/perimener)
+[![Go Doc](https://img.shields.io/badge/godoc-reference-blue.svg)](http://godoc.org/github.com/swade1987/perimener)
+[![Powered By: GoReleaser](https://img.shields.io/badge/powered%20by-goreleaser-green.svg)](https://github.com/goreleaser)
+
+![CircleCI](https://img.shields.io/circleci/build/github/swade1987/perimener/main?token=b4bf1e18d4ae9a0cc2849a904a5158ee991c8445)
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/swade1987/perimener)
 
 Named after the Greek word **Perímene** _αναμονή_ for wait.
 
