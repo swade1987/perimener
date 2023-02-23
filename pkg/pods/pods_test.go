@@ -89,9 +89,12 @@ func TestReadyCount(t *testing.T) {
 
 	for i, podList := range inputReadyCount {
 		t.Run("", func(t *testing.T) {
+                        // The input variables mutate with potentially unwanted effects 
+                        podlist := podList
+                        index := i
 			t.Parallel()
-			got := ReadyCount(&podList)
-			want := outputReadyCount[i]
+			got := ReadyCount(&podlist)
+			want := outputReadyCount[index]
 			if got != want {
 				t.Errorf("Got %q, want %q", got, want)
 			}
